@@ -1,0 +1,202 @@
+% !TEX encoding = UTF-8
+% !TEX program = pdflatex
+% !TEX spellcheck = en_GB
+
+\documentclass[english,a4paper]{europasscv}
+
+\ecvname{Dario Faggioli}
+\ecvaddress{via del piano all'isola, 55, 50053 Empoli (Italy)}
+
+\ecvtelephone[+39 347 3817921]{+39 0571 1613545}
+
+\ecvemail{dario.faggioli@linux.it}
+\ecvhomepage{https://about.me/dario.faggioli}
+
+\ecvim{IRC}{dariof}
+\ecvim{GoogleHangout}{raistlin.df}
+
+\ecvdateofbirth{21 January 1982}
+\ecvnationality{Italian}
+\ecvgender{Male}
+
+\ecvpicture[width=3.8cm]{europasscv_photo.jpg}
+
+\begin{document}
+
+  \begin{europasscv}
+
+  \ecvpersonalinfo
+
+  %\ecvbigitem{Job applied for}{Software Engineer - Virtualization Specialist}
+
+  \ecvsection{Work experience}
+
+  \ecvtitle{January 2018--Present}{Software Engineer - Virtualization Specialist}
+  \ecvitem{Employer}{SUSE Software Solutions Italy srl, Viale Giorgio Ribotta 11, 00144 Roma (Roma) -- SUSE Linux GmbH, Maxfeldstraße 5, 90409 Nürnberg, Germany}
+  \ecvitem{Responsibility}{Work on developing, enhancing, root-causing and fixing issues on the virtualization solutions supported by SUSE (Xen and KVM); particular focus on performance evaluation and improvement; support the respective upstream communities and participate in code review and dissemination activities}
+
+  \ecvtitle{October 2011--October 2017}{Senior Software Engineer}
+  \ecvitem{Employer}{Citrix Systems Italy, Largo Augusto, 8, 20122, Milano (MI) Italy -- Citrix Systemd UK Ltd, 101 Cambridge Science Park Rd, Milton, Cambridge CB4 0FY, United Kingdom}
+  \ecvitem{Responsibility}{Work inside the Xen-Project Open Source community to take care of, enhance and improve performance of the Xen hypervisor; increase efficiency on NUMA platforms; improve virtual CPUs scheduling within the hypervisor; support the community and participate in code review and dissemination activities}
+
+  \ecvtitle{June 2011--September 2011}{Software Developer}
+  \ecvitem{Employer}{CDR s.r.l., via degli Artigiani, 6, 50055 Ginestra Fiorentina (FI), Italy, https://www.cdr-mediared.it/}
+  \ecvitem{Responsibility}{Developing the firmware for automatic toll collection in motorways; lead the adoption of advanced software engineering practices (coding standards, documentation, etc); evaluate the possibilities of integrating, in the toll collecting machines, new components based on FPGAs/CPLDs}
+
+  \ecvtitle{September 2009--February 2010}{Software Developer}
+  \ecvitem{Employer}{Evidence s.r.l., via Giosu\`{e} Carducci, 56, 56010 Ghezzano, San Giuliano Terme (PI), Italy, http://www.evidence.eu.com/ -- within ACTORS FP7 EU funded project (http://www.actors-project.eu)}
+  \ecvitem{Responsibility}{Design and development of an Earliest Deadline First based scheduling class (now integrated in upstream Linux kernel, known as \tt{SCHED\_DEADLINE})}
+
+  \ecvtitle{July 2004--December 2004}{Software Developer}
+  \ecvitem{Employer}{Azienda Sanitaria USL11, via dei Cappuccini79, 50053 Empoli (FI), Italy}
+  \ecvitem{Activities and Responsibilities}{Design and develop technical solutions for the IT department (enhancing Web services, DNS and e-mail infrastructure)}
+  \ecvitem{}{\ecvhighlight{Business or sector}\quad Public Healthcare Provider}
+  
+  \ecvsection{Technical skills and competencies}
+
+  \ecvitem{System-level Programming}{scheduling, resource management, hard and soft real-time systems, transactional memory}
+  \ecvitem{User-level programming}{programming in POSIX environments, multithread/concurrent and real-time programming, client/server architectures}
+  \ecvitem{Open Source Projects}{
+    \begin{ecvitemize}
+      \item Xen hypervisor: \textit{maintainer} of \textbf{scheduling} and \textbf{cpupools}; contributed several bugfixes, refactoring and performance improving changes. Ongoing effort to make Xen switch to a new scheduler (\texttt{Credit2} as default. Author of the algorithm and the code for automatic NUMA node placement of a VM at creation time;
+      \item Linux kernel: bugfix and refactoring of the (real-time) scheduler code, implementation of new scheduling algorithms (\texttt{SCHED\_DEADLINE}, landed upstream, \texttt{SCHED\_SPORADIC});
+      \item BeRTOS real-time kernel (http://www.bertos.org): implementation of Priority Inheritance for in-kernel semaphores;
+      \item AQuoSA soft real-time Qos middlewere (http://aquosa.sourceforge.net): implementation of the Bandwidth Inheritnce syncronization protocol; several improvements and bugfixes;
+      \item Open Macro Library (http://oml.sourceforge.net): implemented the concept of timing and deadline constraints.
+    \end{ecvitemize}
+  }
+  \ecvitem{Traditional/SScripting languages}{Assembly (for x86/x86 64), C/C++, Bash, Perl (basic), Golang (learning now)}
+  \ecvitem{Version control systems}{git and stacked git, mercurial, svn, cvs}
+  \ecvitem{Web languages}{cgi-bin, PHP, (X)HTML and CSS, Javascript, SQL}
+  \ecvitem{Hardware languages}{Verilog, VHDL}
+  \ecvitem{Scientific packages}{ModelSIM, Matlab, octave, gnuplot}
+  \ecvitem{Operating systems}{GNU/Linux (Debian, Ubuntu, Fedora, OpenSuSE): administrator; *BSD (FreeBSD): advanced user, Windows: advanced user}
+  \ecvitem{Other Interests}{Multimedia, video enoding/decoding, digital image processing, face and voice detection and recognition, 3D Graphics, 3D printing}
+
+  \ecvsection{Presentations at Open Source Conferences}
+
+  \ecvitem{}{LinuxLab 2018, \textit{Virtualization in the age of speculative execution hardware bugs}, Firenze (Italy), December 2018}
+  \ecvitem{}{XenProject Developer and Design Summit 2018, \textit{(Automated?) Performance Testing in Virtualization}, Nanjing (China), June 2018}
+  \ecvitem{}{LinuxLab 2017, \textit{Xen, and the Many Uses of Virtualization}, Firenze (Italy), December 2017}
+  \ecvitem{}{XenProject Developer and Design Summit 2017, \textit{Xen Schedulers and their impact on Interrupt Latency}, Budapest (Hungary), July 2017}
+  \ecvitem{}{XenProject Developer and Design Summit 2017, \textit{Credit2 Scheduler: Are We There Yet?}, Budapest (Hungary), July 2017}
+  \ecvitem{}{FOSDEM 2016 \textit{Scheduling in The Age of Virtualization}, Brussels (Belgium), February 2016}
+  \ecvitem{}{XenProject Developer Summit 2015, \textit{Scheduling in Xen: Past, Present and Future}, Seattle (WA) USA, August 2015}
+  \ecvitem{}{FOSDEM 2014, \textit{Virtualization in Android based and embedded systems}, Brussels (Belgium), February 2014}
+  \ecvitem{}{XenSummit 2012, \textit{NUMA and Virtualization, the case of Xen}, San Diego (CA) USA, August 2012}
+  \ecvitem{}{Linux Plumbers Conference 2012, \textit{NUMA and Virtualization, the case of Xen}, San Diego (CA) USA, August 2012}
+  \ecvitem{}{Linux Plumbers Conference 2010, \textit{Network QoS Guarantees for Virtual Machines}, Cambridge (MA) USA, November 2010}
+  \ecvitem{}{Linux Plumbers Conference 2010, \textit{API for Real-Time Scheduling with Temporal Isolation on Linux}, Cambridge (MA) USA, November 2010}
+  \ecvitem{}{10$^{th}$ Linux Kernel Summit, \textbf{invited} to present the status of the \texttt{SCHED\_DEADLINE} real-time scheduler, Cambridge (MA) USA, November 2010}
+ 
+  \ecvsection{Personal skills}
+
+  \ecvblueitem{Driving licence}{EEA cat. B}
+
+  \ecvmothertongue{Italian}
+
+  \ecvlanguageheader
+  \ecvlastlanguage{English}{C1}{C2}{C1}{C1}{C2}
+  \ecvlanguagefooter
+   
+  \ecvitem{Communication skills}{Strong teamwork attitube, both toward local and remote/distributed teams (worked remotely for 6 years, while at Citrix). Longstanding history of participation in Open Source communities: most active in the Xen-Project one, but with an history of presence also in the LibVirt, Linux Kernel (LKML), and others. Author of several technical blog entries on the Xen-Project blog, acted as 'Czar ("coordinator") of the project blog itself for over 1 year. Acted as a mentor for Open Source outreach programs. Manned the Xen-Project booth on various occasions (LinuxCon and many editions of FOSDEM)}
+
+  \ecvitem{Social skills}{Active local politics. Passionate about environmental campaings. Member of the home town Linux User Group (GOLEM, http://golem.linux.it) from 2004; president for 2005, vice-president for 2006, counselor for 2007 and 2008}
+
+  \ecvitem{Personal Interests}{Reading and travelling}
+
+  \ecvsection{Education and training}
+  
+  \ecvtitlelevel{January 2008--January 2012}{Ph.D (Diploma di Perfezionamento) on\newline "Innovative Technologies of ICT and Robotics"}{}
+  \ecvitem{Institution}{Scuola Superiore Sant’Anna di Studi Universitari e di Perfezionamento, Pisa (Italy)}
+  \ecvitem{Affiliation}{Real-Time Systems (ReTiS) Lab, CEIICP, via G. Moruzzi 1, 56124 Pisa (Italy)}
+  \ecvitem{Thesis on}{\textit{Soft Real-Time Scheduling and Synchronization in General Purpose Operating Systems}}
+  
+  \ecvtitle{October 2004--October 2007}{Master of Science (Laurea Magistrale) \textbf{cum Laude} in\newline Computer Science Engineering}
+  \ecvitem{Institution}{Università di Pisa, Italy}
+  \ecvitem{Curriculum}{"Web and industrial systems"}
+  \ecvitem{Thesis on}{\textit{Implementation and Study of the BandWidth Inheritance protocol in the Linux kernel}}
+  
+  \ecvtitle{October 2001--July 2004}{Bechelor (Laurea) \textbf{cum Laude} in\newline Computer Science Engineering}
+  \ecvitem{Institution}{Università di Pisa, Italy}
+  \ecvitem{Thesis on}{\textit{Implementation of the disk device service on a microkernel operating system}}
+
+  \ecvtitle{1996--2001}{High School Degree (Diploma di Maturit\`{a} Scientifica) \textbf{100/100}}
+  \ecvitem{Institution}{Liceo Scientifico "Il Pontormo", Empoli (Italy)}
+
+  \ecvsection{Other education and training activities}
+
+  \ecvtitle{8th--12th September 2008}{ARTIST2 Summer School 2008 in Europe}
+  \ecvitem{Organization}{ARTIST2 Network of Excellence on Embedded System Design}
+  \ecvitem{Location}{Autrans (France)}
+
+  \ecvtitle{23rd--25th June 2008}{Real-Time kernels for Microcontrollers: Theory and Practice}
+  \ecvitem{Organization}{ARTIST2 Network of Excellence on Embedded System Design}
+  \ecvitem{Location}{Pisa (Italy)}
+
+  \ecvtitle{26rd--30th May 2008}{ARTIST2 Graduate Course on Embedded Control Systems}
+  \ecvitem{Organization}{ARTIST2 Network of Excellence on Embedded System Design}
+  \ecvitem{Location}{Stocholm (Sweden)}
+
+%   \pagebreak
+  
+  \ecvsection{Teaching Experience}
+
+  \ecvtitle{October--December 2010 and March--July 2009}{Lab assistant}
+  \ecvitem{Institution}{Engineering Faculty, University of Siena}
+  \ecvitem{Activity}{Labs on POSIX multithread and real-time programming for the "Real-Time Operating Systems" course}
+
+  \ecvtitle{February--March 2006 and October--December 2005}{Lecturer}
+  \ecvitem{Institution}{"A. Pacinotti" Professional High School, Pontedera, Italy}
+  \ecvitem{Activity}{Seminars on "Programming with the C language" and "The Linux Operating System"}
+
+  \ecvsection{Research}
+
+  \ecvtitle{19 December 2008--18 May 2009}{Assigned to the European Research Project "Framework for Real-Time Embedded Systems Based on ContRacts" (FRESCOR, IST 034026, http://www.frescor.org)}
+  \ecvitem{Institution}{Scuola Superiore di Studi Universitari e di Perfezionamento Sant'Anna, Pisa (Italy)}
+  \ecvitem{Responsibility}{Design and development of a middlewere for maximizing the QoS of multimedia applications in a GNU/Linux environment}
+
+  \ecvtitle{5th November 2007--15th January 2008}{Assigned to the European Research Project "Framework for Real-Time Embedded Systems Based on ContRacts" (FRESCOR, IST 034026, http://www.frescor.org)}
+  \ecvitem{Institution}{Scuola Superiore di Studi Universitari e di Perfezionamento Sant'Anna, Pisa (Italy)}
+  \ecvitem{Responsibility}{Implementation of the BandWidth Inheritance real-time synchronization protocol in the AQuoSA Framework (http://aquosa.sf.net) for the Linux kernel}
+
+  \ecvsection{Presentations at Academic Conferences}
+  \ecvitem{}{22$^{nd}$ \textbf{Euromicro Conference on Real-Time Systems}, Bruxelles (Belgium), July 2010}
+  \ecvitem{}{6$^{th}$ Workshop on \textbf{Operating Systems Platforms for Embedded Real-Time Applications}, Bruxelles (Belgium), July 2010}
+  \ecvitem{}{11$^{th}$ \textbf{Real-Time Linux Workshop}, Dresden (Germany), October 2009}
+  \ecvitem{}{5$^{th}$ Workshop on \textbf{Operating Systems Platforms for Embedded Real-Time Applications}, Dublin (Ireland), July 2009}
+  \ecvitem{}{24$^{th}$ \textbf{Annual ACM Symposium on Applied Computing}, Honolulu (USA), March 2009}
+  \ecvitem{}{10$^{th}$ \textbf{Real-Time Linux Workshop}, Colotlan (Mexico), October 2008}
+  \ecvitem{}{4$^{th}$ Workshop on \textbf{Operating Systems Platforms for Embedded Real-Time Applications}, Prague (Czech Republic), July 2008}
+
+  \ecvsection{Publications}
+
+  \ecvitem{International Peer-Reviewed Journals}{J. Lelli, C. Scordino, L. Abeni, \textbf{D. Faggioli}, \textit{Deadline scheduling in the Linux kernel} Software: Practice and Experience 46 (6), 821-839, Jume 2015}
+  \ecvitem{}{\textbf{D. Faggioli}, G. Lipari, T. Cucinotta, \textit{Analysis and implementation of the multiprocessor bandwidth inheritance protocol} Springer Real-Time Systems Journal, Vol. 48, Issue 6, pp 789-825, November 2012}
+  \ecvitem{}{J. Lelli, \textbf{D. Faggioli}, T. Cucinotta, G. Lipari, \textit{An Experimental Comparison of Different Real-Time Schedulers on Multicore Systems} Elsevier Journal of Systems and Software (JSS), Vol. 85, Issue 10, pp. 2405–2416, October 2012}
+  \ecvitem{}{T. Cucinotta, \textbf{D. Faggioli}, \textit{Handling Timing Constraints Violations in Soft Real-Time Applications as Exceptions} Elsevier Journal of Systems and Software (JSS), December 2011}
+  \ecvitem{}{M. Sojka, P. Pisa, \textbf{D. Faggioli}, T. Cucinotta, F. Checconi, Z. Hanzalek, G. Lipari, \textit{Modular software architecture for flexible reservation mechanisms on heterogeneous resources} Elsevier Journal of Systems Architecture (JSA), Vol. 57, Issue 4, pp. 366-382, April 2011}
+  \ecvitem{}{T. Cucinotta, L. Palopoli, L. Abeni, \textbf{D. Faggioli}, G. Lipari, \textit{On the integration of  application level and resource level QoS control for real-time applications} IEEE Transactions on Industrial Informatics, Vol. 6, No. 4, November 2010}
+  \ecvitem{}{A. Mancina, G. Lipari, \textbf{D. Faggioli}, J. N. Herder, B. Gras e A. S. Tanenbaum, \textit{Enhancing a Dependable Multiserver Operating System with Temporal Protection via Resource Reservations} Springer Real-Time Systems Journal, Vol. 43, Issue 2 (2009), pp. 177}
+
+  \ecvitem{International Peer-Reviewed Conferences/Workshops}{L. Abeni, \textbf{D. Faggioli}, \textit{An Experimental Analysis of the Xen and KVM Latencies}, In proceedings of the 22nd International Symposium on Real-Time Distributed Computing (ISORC), Valencia (Spain), May 2019}
+  \ecvitem{}{A. Avanzini, P. Valente, \textbf{D. Faggioli}, Paolo Gai, \textit{Integrating Linux and the real-time ERIKA OS through the Xen hypervisor}, 10th IEEE International Symposium on Industrial Embedded Systems (SIES), June 2015}
+  \ecvitem{}{J. Lelli, G. Lipari, \textbf{D. Faggioli}, T. Cucinotta, \textit{An efficient and scalable implementation of global EDF in Linux} In proceedings of the 7th Workshop on Operating Systems Platforms for Embedded Real-Time Applications (OSPERT), Porto (Portugal), July 2011}
+  \ecvitem{}{T. Cucinotta, \textbf{D. Faggioli}, G. Bagnoli, \textit{Low-Latency Audio on Linux by Means of Real-Time Scheduling} In proceedings of the 8th Linux Audio Conference (LAC) 2011, Maynooth (Ireland), May 2011}
+  \ecvitem{}{T. Cucinotta, D. Giani, \textbf{D. Faggioli}, F. Checconi, \textit{Effective Real-Time Computing on Linux} In Proceedings of the 12th Real-Time Linux Workshop (RTLWS), Nairobi (Kenya), October 2010}
+  \ecvitem{}{T. Cucinotta, D. Giani, \textbf{D. Faggioli}, F. Checconi, \textit{Providing Performance Guarantees to Virtual Machines using Real-Time Scheduling} In proceedings of the 5th Workshop on Virtualization and High-Performance Cloud Computing (VHPC) 2010, island of Ischia (Italy), August 2010}
+  \ecvitem{}{T. Cucinotta, \textbf{D. Faggioli}, \textit{An Exception Based Approach to Timing Constraints Violations in Real-Time and Multimedia Applications} In proceedings of the 5th International IEEE Symposium on Industrial Embedded Systems (SIES) 2010, Trento (Italy), July 2010}
+  \ecvitem{}{\textbf{D. Faggioli}, G. Lipari, T. Cucinotta, \textit{The Multiprocessor BandWidth Inheritance Protocol} In proceedings of the 22nd Euromicro Conference on Real-Time Systems (ECRTS), Brussels (Belgium), July 2010}
+  \ecvitem{}{N. Manica, L. Abeni, L. Palopoli, \textbf{D. Faggioli}, C. Scordino, \textit{Schedulable Device Drivers: Implementation and Experimental Results} In proceedings of the 6th Workshop on Operating Systems Platforms for Embedded Real-Time Applications (OSPERT), Brussels (Belgium), July 2010}
+  \ecvitem{}{\textbf{D. Faggioli}, M. Bertogna, F. Checconi, \textit{Sporadic Server Revised} In proceedings of the 25th Annual ACM Symposium on Applied Computing (SAC), Sierre (Switzerland), March 2010}
+  \ecvitem{}{\textbf{D. Faggioli}, F. Checconi, M. Trimarchi, C. Scordino, \textit{An EDF scheduling class for the Linux kernel} In proceedings of the 11th Real-Time Linux Workshop (RTLWS), Dresden (Germany), October 2009}
+  \ecvitem{}{F. Checconi, T. Cucinotta, \textbf{D. Faggioli}, G. Lipari, \textit{Hierarchical Multiprocessor CPU Reservations for the Linux Kernel} In proceedings of the 5th Workshop on Operating Systems Platforms for Embedded Real-Time Applications (OSPERT), Dublin (Ireland), July 2009}
+  \ecvitem{}{T. Cucinotta, \textbf{D. Faggioli}, A. Evangelista, \textit{Exception-based Management of Timing Constraints Violations for Soft Real-Time Applications} In proceedings of the 5th Workshop on Operating Systems Platforms for Embedded Real-Time Applications (OSPERT), Dublin (Ireland), July 2009}
+  \ecvitem{}{\textbf{D. Faggioli}, M. Trimarchi, F. Checconi, M. Bertogna, A. Mancina, \textit{An Implementation of the Earliest Deadline First Algorithm in Linux} In proceedings of the 24th Annual ACM Symposium on Applied Computing (SAC), Honolulu (USA), March 2009}
+  \ecvitem{}{M. Bertogna, F. Checconi, \textbf{D. Faggioli}, \textit{Non-Preemptive Access to Shared Resources in Hierarchical Real-Time Systems} In proceedings of the 1st Workshop on Compositional Theory and Technology for Real-Time Embedded Systems (CRTS), Barcellona (Spain), November 2008}
+  \ecvitem{}{\textbf{D. Faggioli}, A. Mancina, F. Checconi, G. Lipari, \textit{Design and Implementation of a POSIX compliant Sporadic Server for the Linux Kernel} In proceedings of the 10th Real-Time Linux Workshop (RTLWS), Colotlan (Mexico), October 2008}
+  \ecvitem{}{\textbf{D. Faggioli}, G. Lipari, T. Cucinotta, \textit{An Efficient Implementation of the BandWidth Inheritance Protocol for Handling Hard and Soft Real-Time Applications in the Linux Kernel} In proceedings of the 4th Workshop on Operating Systems Platforms for Embedded Real-Time Applications (OSPERT), Prague (Czech Republic), July 2008}
+
+  \end{europasscv}
+
+\end{document}
