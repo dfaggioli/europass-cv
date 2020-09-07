@@ -8,14 +8,15 @@
 % See  http://www.latex-project.org/lppl.txt
 % for the details of that license
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{europasscv}[2015/03/10 (beta) Europass curriculum vitae class, 2013 version]
-
-% CV models and instructions:
-%   http://europass.cedefop.eu.int/htm/index.htm
-% Recommendations:
-%   http://europa.eu.int/scadplus/leg/en/cha/c11057.htm
+\ProvidesClass{europasscv}[2019/01/14 The new Europass curriculum vitae class]
 
 \newcommand\ecv@utf[1]{#1}
+
+\def\ecv@dcompcola{0.2}
+\def\ecv@dcompcolb{0.2}
+\def\ecv@dcompcolc{0.2}
+\def\ecv@dcompcold{0.2}
+\def\ecv@dcompcole{0.2}
 
 % Set language
 \DeclareOption{english}{%
@@ -80,10 +81,10 @@
     \ClassWarningNoLine{europasscv}{Swedish definition file 'europasscv_sv.def' not found}}%
   }%
 }
-\DeclareOption{norwegian}{%
+\DeclareOption{norsk}{%
   \AtEndOfPackage{%
-    \InputIfFileExists{europasscv_no.def}{}{%
-    \ClassWarningNoLine{europasscv}{Norwegian definition file 'europasscv_no.def' not found}}%
+    \InputIfFileExists{europasscv_nb.def}{}{%
+    \ClassWarningNoLine{europasscv}{Norwegian (Bokmål) definition file 'europasscv_nb.def' not found}}%
   }%
 }
 \DeclareOption{dutch}{%
@@ -175,8 +176,11 @@
 }
 \DeclareOption{greek}{%
   \AtEndOfPackage{%
-     \InputIfFileExists{europasscv_gr.def}{}{%
-    \ClassWarningNoLine{europasscv}{Greek definition file 'europasscv_gr.def' not found}}%
+    \InputIfFileExists{europasscv_el.def}{}{%
+    \ClassWarningNoLine{europasscv}{Greek definition file 'europasscv_el.def' not found}}%
+    \ifPDFTeX
+      \PackageError{europasscv}{Please run XeLaTeX or LuaLaTeX for greek language support}{}
+    \fi
   }%
 }
 \DeclareOption{galician}{%
@@ -190,49 +194,6 @@
      \InputIfFileExists{europasscv_sr.def}{}{%
     \ClassWarningNoLine{europasscv}{Serbian definition file 'europasscv_sr.def' not found}}%
   }%
-}
-
-% Input encodings
-\DeclareOption{ascii}{\AtEndOfClass{\inputencoding{ascii}}}
-\DeclareOption{latin1}{\AtEndOfClass{\inputencoding{latin1}}}
-\DeclareOption{latin2}{\AtEndOfClass{\inputencoding{latin2}}}
-\DeclareOption{latin3}{\AtEndOfClass{\inputencoding{latin3}}}
-\DeclareOption{latin4}{\AtEndOfClass{\inputencoding{latin4}}}
-\DeclareOption{latin5}{\AtEndOfClass{\inputencoding{latin5}}}
-\DeclareOption{latin9}{\AtEndOfClass{\inputencoding{latin9}}}
-\DeclareOption{latin10}{\AtEndOfClass{\inputencoding{latin10}}}
-\DeclareOption{decmulti}{\AtEndOfClass{\inputencoding{decmulti}}}
-\DeclareOption{cp850}{\AtEndOfClass{\inputencoding{cp850}}}
-\DeclareOption{cp852}{\AtEndOfClass{\inputencoding{cp852}}}
-\DeclareOption{cp858}{\AtEndOfClass{\inputencoding{cp858}}}
-\DeclareOption{cp437}{\AtEndOfClass{\inputencoding{cp437}}}
-\DeclareOption{cp437de}{\AtEndOfClass{\inputencoding{cp437de}}}
-\DeclareOption{cp865}{\AtEndOfClass{\inputencoding{cp865}}}
-\DeclareOption{applemac}{\AtEndOfClass{\inputencoding{applemac}}}
-\DeclareOption{next}{\AtEndOfClass{\inputencoding{next}}}
-\DeclareOption{cp1250}{\AtEndOfClass{\inputencoding{cp1250}}}
-\DeclareOption{cp1252}{\AtEndOfClass{\inputencoding{cp1252}}}
-\DeclareOption{cp1257}{\AtEndOfClass{\inputencoding{cp1257}}}
-\DeclareOption{ansinew}{\AtEndOfClass{\inputencoding{ansinew}}}
-\DeclareOption{utf8}{\AtEndOfClass{\inputencoding{utf8x}}}
-\DeclareOption{utf8x}{\AtEndOfClass{\inputencoding{utf8x}}}
-\DeclareOption{koi8-r}{\AtEndOfClass{\inputencoding{koi8-r}}}
-\DeclareOption{koi8-ru}{\AtEndOfClass{\inputencoding{koi8-ru}}}
-\DeclareOption{koi8-u}{\AtEndOfClass{\inputencoding{koi8-u}}}
-\DeclareOption{cp1251}{\AtEndOfClass{\inputencoding{cp1251}}}
-\DeclareOption{cp855}{\AtEndOfClass{\inputencoding{cp855}}}
-\DeclareOption{cp866}{\AtEndOfClass{\inputencoding{cp866}}}
-\DeclareOption{maccyr}{\AtEndOfClass{\inputencoding{maccyr}}}
-\DeclareOption{macukr}{\AtEndOfClass{\inputencoding{macukr}}}
-
-% Set font
-\DeclareOption{helvetica}{%                       
-  \renewcommand{\rmdefault}{phv}
-  \renewcommand{\sfdefault}{phv}
-}
-\DeclareOption{arial}{%                       
-  \renewcommand{\rmdefault}{ma1} % (this font is NOT installed by default!)
-  \renewcommand{\sfdefault}{ma1}
 }
 
 \DeclareOption{narrow}{
@@ -251,7 +212,7 @@
 
 \def\ecv@currvitaekey{}
 \newcommand{\ecvcurrvitae}{\ifx\@empty\ecv@currvitaekey Curriculum vitae \else \ecv@currvitaekey \fi}
-\newcommand{\ecvcoloredtitle}{\fontfamily{phv}\fontseries{m}\selectfont \textcolor{ecvhighlightcolor}{\ecvcurrvitae}}
+\newcommand{\ecvcoloredtitle}{\selectecvfont \textcolor{ecvhighlightcolor}{\ecvcurrvitae}}
 
 % Europass logo
 \newif\if@ecvlogo\@ecvlogotrue
@@ -259,12 +220,14 @@
 \DeclareOption{notitle}{\def\ecv@notitle{}}
 
 % Page numbering
-\DeclareOption{totpages}{%
-  \AtEndOfPackage{\RequirePackage{totpages}%
-  \def\ecv@totpages{~/~\ref{TotPages}}
-  %\ecvpage{\ecv@pagekey~\thepage~/~\ref{TotPages}}%
-  }%
+\AtEndOfPackage{\RequirePackage{lastpage}}
+\def\ecv@totpages{~/~\pageref{LastPage}}
+\DeclareOption{nototpages}{
+  \def\ecv@totpages{}
 }
+
+\newcommand*{\ecvpage}[1]{\def\ecv@page{#1}}
+\ecvpage{\ecv@pagekey~\thepage\ecv@totpages}
 
 \newif\if@ecvnodocument\@ecvnodocumentfalse
 \DeclareOption{nodocument}{%
@@ -279,18 +242,23 @@
   \PassOptionsToClass{\CurrentOption}{article}%
 } 
 
-\ExecuteOptions{english,hrule,totpages} % Default options
+\ExecuteOptions{english,hrule} % Default options
 
 \ProcessOptions\relax
 
 \LoadClass{article}
-\RequirePackage[utf8]{inputenc}
+\RequirePackage{iftex}
+\ifPDFTeX
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage[T1]{fontenc}
+\else
+  \usepackage{fontspec}
+\fi
 \RequirePackage{array}
 \RequirePackage{fancyhdr} % For page numbering
 \RequirePackage{xcolor}
 \RequirePackage{url}
 \RequirePackage{soul}
-\RequirePackage{tabu}
 \RequirePackage{setspace}
 \RequirePackage{geometry}
 \RequirePackage{textcomp} % For copyright symbol
@@ -298,13 +266,23 @@
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage{colortbl}
 \RequirePackage{graphicx}
+\RequirePackage{xparse}
+\RequirePackage{substr}
+\RequirePackage{keyval}
 \if@ecvdebug \RequirePackage{showframe} \fi
-\RequirePackage[T1]{fontenc}
 
 
-\def\ecv@totpages{}
-\newcommand*{\ecvpage}[1]{\def\ecv@page{#1}}
-\ecvpage{\ecv@pagekey~\thepage\ecv@totpages}
+\newcommand{\selectecvfont}{\ifPDFTeX\fontfamily{\ecv@font}\selectfont\fi}
+\newcommand*{\ecvfont}[1]{\def\ecv@font{#1}}
+\ifPDFTeX
+  \ecvfont{phv}
+\else
+  \ifx\@empty\ecv@narrow
+    \setmainfont{TeX Gyre Heros Cn}
+  \else
+    \setmainfont{TeX Gyre Heros}
+  \fi
+\fi
 
 \def\ecv@lfoot{%
   \footnotesize{\@date}
@@ -312,7 +290,7 @@
 
 % Right Footnote to be shown on every page
 \newcommand\ecvfootnote[1]{\def\ecv@cfoot{#1}}
-\ecvfootnote{\textcopyright~\ecv@europeanunionkey, 2002-\the\year\ | http://europass.cedefop.europa.eu }
+\ecvfootnote{\textcopyright~\ecv@europeanunionkey, 2002 -- \the\year\ | http://europass.cedefop.europa.eu }
 
 
 \AtBeginDocument{%
@@ -322,19 +300,19 @@
 \ecvColSep{10pt}
 
 % Set layout
-
+\newlength{\difflength}
 \if@ecvnodocument\else
     \newgeometry{body={18.5cm,24cm}, vratio={4:3}}
 \fancyfoot{}
 \fancyfoot[L]{\begin{minipage}{\ecv@leftcolwidth}
 \begin{flushleft}
-\footnotesize\textcolor{ecvhighlightcolor}{\fontfamily{phv}\fontseries{m}\selectfont\ecv@lfoot}\end{flushleft}
-\end{minipage}\hspace*{\ecv@colsep}\footnotesize\textcolor{ecvhighlightcolor}{\fontfamily{phv}\fontseries{m}\selectfont\ecv@cfoot}
+\footnotesize\textcolor{ecvhighlightcolor}{\selectecvfont\ecv@lfoot}\end{flushleft}
+\end{minipage}\hspace*{\ecv@colsep}\footnotesize\textcolor{ecvhighlightcolor}{\selectecvfont\ecv@cfoot}
 }
 
 \fancyfoot[R]{\begin{minipage}{\ecv@rightcolwidth}
 \begin{flushright}
-\footnotesize\textcolor{ecvhighlightcolor}{\fontfamily{phv}\fontseries{m}\selectfont\ecv@page}\end{flushright}
+\footnotesize\textcolor{ecvhighlightcolor}{\selectecvfont\ecv@page}\end{flushright}
 \end{minipage}}
 
 \fancypagestyle{ecvfancy}{
@@ -343,29 +321,29 @@
 \fancyhead{}
  
 \fancyhead[R]{
-\raggedleft \fontfamily{phv}\fontseries{m}\selectfont \textcolor{ecvhighlightcolor}{\ecv@name}
+\raggedleft \selectecvfont \textcolor{ecvhighlightcolor}{\ecv@name}
 }
 
 \fancyhead[L]{
-\noindent
-\begin{minipage}{0.5\textwidth}
-\noindent\makebox[\ecv@leftcolwidth][l]{\noindent\raisebox{-0.68\height}[0pt][0pt]{\if@ecvlogo\includegraphics[width=0.6\ecv@logowidth]{europasslogo2013.pdf}\fi}}
-\hspace*{\ecv@leftcolwidth}\hspace*{\ecv@colsep}\noindent
-\raisebox{\dp\strutbox}{\ecvcoloredtitle}
-\end{minipage}
-}
+  \setlength{\difflength}{\ecv@leftcolwidth}
+  \addtolength{\difflength}{-0.6\ecv@logowidth}
+  \noindent
+  \begin{minipage}{0.5\textwidth}
+    \noindent\makebox[\ecv@leftcolwidth][l]{\noindent\raisebox{-6.5pt}[0pt][0pt]{\if@ecvlogo\includegraphics[width=0.6\ecv@logowidth]{europasslogo2013.pdf}\else \hspace{0.6\ecv@logowidth}\fi}\hspace{\difflength}\hspace{\ecv@colsep}{\ifx\@empty\ecv@notitle \empty \else \ecvcoloredtitle \fi}}
+  \end{minipage}
+  }
 }
 
 \fancypagestyle{first}{
 \fancyhead[R]{}
 \fancyhead[L]{
-\noindent
-\begin{minipage}{0.5\textwidth}
-\noindent\makebox[\ecv@leftcolwidth][l]{\noindent\raisebox{-0.52\height}[0pt][0pt]{\if@ecvlogo\includegraphics[width=\ecv@logowidth]{europasslogo2013.pdf}\fi}}
-\hspace*{\ecv@leftcolwidth}\hspace*{\ecv@colsep}\noindent
-\raisebox{\dp\strutbox}{\ecvcoloredtitle}
-\end{minipage}
-}
+  \setlength{\difflength}{\ecv@leftcolwidth}
+  \addtolength{\difflength}{-\ecv@logowidth}
+  \noindent
+  \begin{minipage}{0.5\textwidth}
+    \noindent\makebox[\ecv@leftcolwidth][l]{\noindent\raisebox{-10.5pt}[0pt][0pt]{\if@ecvlogo\includegraphics[width=\ecv@logowidth]{europasslogo2013.pdf}\else \hspace{\ecv@logowidth}\fi}\hspace{\difflength}\hspace{\ecv@colsep}{\ifx\@empty\ecv@notitle \empty \else \ecvcoloredtitle \fi}}
+  \end{minipage}
+  }
 }
 
 \thispagestyle{first}
@@ -374,20 +352,40 @@
 \fi % End \if@ecvnodocument
 } % End \AtBeginDocument
 
-% Thanks to Roman Bertle for suggesting the following:
 \renewcommand{\labelitemi}{\normalfont\bfseries \textendash}
-\renewcommand{\labelitemii}{\textasteriskcentered}
-\renewcommand{\labelitemiii}{\textperiodcentered}
+\renewcommand{\labelitemii}{\textbullet}
+\renewcommand{\labelitemiii}{\normalfont\bfseries \textendash}
+\renewcommand{\labelitemiv}{\textbullet}
 
 \newcommand*{\ecvfirstname}[1]{\def\ecv@firstname{#1}} % Deprecated
 \newcommand*{\ecvlastname}[1]{\def\ecv@lastname{#1}} % Deprecated
 \newcommand*{\ecvname}[1]{\def\ecv@name{#1}} % Replaces the above
 \newcommand*{\ecvfootername}[1]{\def\ecv@footername{#1}}
 \newcommand*{\ecvaddress}[1]{\def\ecv@address{#1}}
-\newcommand*{\ecvtelephone}[2][]{\def\ecv@telephone{#2}\def\ecv@mobile{#1}}
+\newcommand*{\ecvtelephone}[2][]{
+  \def\ecv@telephone{#2}
+  \ifx&#1&%
+    % #1 is empty
+  \else
+    % #1 is nonempty
+    \def\ecv@mobile{#1}
+  \fi
+}
+\newcommand*{\ecvmobile}[1]{\def\ecv@mobile{#1}}
+\newcommand*{\ecvworkphone}[1]{\def\ecv@workphone{#1}}
 \newcommand*{\ecvfax}[1]{\def\ecv@fax{#1}}
 \newcommand*{\ecvemail}[1]{\def\ecv@email{#1}}
 \newcommand*{\ecvhomepage}[1]{\def\ecv@homepage{#1}}
+\newcommand*{\ecvgithubpage}[1]{\def\ecv@githubpage{#1}}
+\newcommand*{\ecvgitlabpage}[1]{\def\ecv@gitlabpage{#1}}
+\newcommand*{\ecvlinkedinpage}[1]{\def\ecv@linkedinpage{#1}}
+
+\newif\if@ecvorcidlink\@ecvorcidlinkfalse
+\define@key{ecvorcid}{link}[true]{\@ecvorcidlinktrue}
+\newif\if@ecvorcidlabel\@ecvorcidlabelfalse
+\define@key{ecvorcid}{label}[true]{\@ecvorcidlabeltrue}
+\newcommand*{\ecvorcid}[2][]{\setkeys{ecvorcid}{#1}\def\ecv@orcid{#2}}
+
 \def\ecv@im{}
 \newif\if@ecvIMalreadyprovided\@ecvIMalreadyprovidedfalse
 \newcommand*{\ecvim}[2]{\if@ecvIMalreadyprovided \g@addto@macro\ecv@im{\quad} \fi \g@addto@macro\ecv@im{\ecvhighlight{#1} #2} \@ecvIMalreadyprovidedtrue}
@@ -395,102 +393,192 @@
 \newcommand*{\ecvnationality}[1]{\def\ecv@nationality{#1}\@ecvpiextrafieldstrue}
 \newcommand*{\ecvdateofbirth}[1]{\def\ecv@birth{#1}\@ecvpiextrafieldstrue}
 \newcommand*{\ecvgender}[1]{\def\ecv@gender{#1}\@ecvpiextrafieldstrue}
+
 % Personal picture
-\newcommand*{\ecvdrawpicture}{}
-\newcommand*{\ecvbeforepicture}[1]{\def\ecv@beforepic{#1}}
-\newcommand*{\ecvafterpicture}[1]{\def\ecv@afterpic{#1}}
 \newif\if@ecvpicture\@ecvpicturefalse
-\newcommand*\ecvpicture{%\@e
-\@ifnextchar[\ecv@picture{\ecv@picture[]}}
-\def\ecv@picture[#1]#2{%
-\def\ecvarg{#2}
-\ifx\@empty\ecvarg\renewcommand*{\ecvdrawpicture}{}\else
-\renewcommand*{\ecvdrawpicture}{\includegraphics[#1]{#2}}
-\@ecvpicturetrue
-\fi}
-% The following must be used inside \ecvbeforepicture
-% or \ecvafterpicture
-\newcommand*{\ecvspace}[1]{\vspace{#1}}
-\ecvbeforepicture{\raggedleft}
-\ecvafterpicture{0pt}
+\newif\if@ecvpictureright\@ecvpicturerightfalse
+\newif\if@ecvpictureleft\@ecvpictureleftfalse
+\NewDocumentCommand{\ecvpictureleft}{O{,} m}{
+  \@ecvpicturelefttrue \@ecvpicturetrue
+  \def\ecv@pictureleftoptions{#1}
+  \def\ecv@pictureleftfile{#2}
+}
+\NewDocumentCommand{\ecvpictureright}{O{,} m}{
+  \@ecvpicturerighttrue \@ecvpicturetrue
+  \def\ecv@picturerightoptions{#1}
+  \def\ecv@picturerightfile{#2}
+}
+\newcommand{\ecvpicture}[2][]{\ecvpictureleft[#1]{#2}}
+
 \ecvfirstname{}
 \ecvlastname{}
 \ecvname{\ecv@lastname\ \ecv@firstname}
 \ecvfootername{\ecv@name}
 \ecvaddress{}
 \ecvtelephone{}
+\ecvmobile{}
+\ecvworkphone{}
 \ecvfax{}
 \ecvemail{}
 \ecvhomepage{}
+\ecvgithubpage{}
+\ecvgitlabpage{}
+\ecvlinkedinpage{}
+\ecvorcid{}
 \ecvnationality{}
 \ecvdateofbirth{}
 \ecvgender{}
-\ecvpicture{}
 
+% see http://tex.stackexchange.com/a/12811
+\def\processlinks#1{%
+    \begingroup
+    \edef\@tempa{#1\space}%
+    \expandafter\endgroup
+    \expandafter\readwords\@tempa\relax
+}
+\def\readwords#1 #2\relax{%
+      \convertstring{#1}%  #1 = substr, #2 = rest of string
+      \begingroup
+      \ifx\relax#2\relax  % is #2 empty?
+         \def\next{\endgroup}% your own end-macro if required
+      \else
+	 \quad
+         \def\next{\endgroup\readwords#2\relax}%
+      \fi
+      \next
+}
+
+\newif\if@processlinks@converttoemail
+\def\convertstring#1{\if@processlinks@converttoemail \toemail{#1} \else \tourl{#1} \fi}
+\newcommand{\tourl}[1]{%
+\IfSubStringInString{://}{#1}{\def\temp{#1}}{\def\temp{http://#1}}%
+\setul{.5pt}{.4pt}\href{\temp}{\ul{\mbox{#1}}}%
+}
+\def\toemail#1{\setul{.5pt}{.4pt}\href{mailto:#1}{\ul{\mbox{#1}}}}
 
 \newif\if@ecvpineedspipe\@ecvpineedspipefalse
+\newif\if@ecvphoneispresent\@ecvphoneispresentfalse
+\newlength{\ecv@pileftcolwidth}
+\newlength{\ecv@pirightcolwidth}
 \providecommand{\ecvpersonalinfo}[1][0pt]{%
-\ecvitem[#1]{\ecvsectionstyle{\ecv@infosectionkey}}{
-\begin{doublespacing}
-\begin{tabular}[t]{@{}p{\if@ecvpicture 0.7\ecv@rightcolwidth \else \ecv@rightcolwidth\fi}@{}p{\if@ecvpicture 0.3\ecv@rightcolwidth \else 0pt\fi}@{}}
-\raggedright
-{\ecvLargenormalstyle{\ecv@name}} \newline
-\ifx\@empty\ecv@address\else
-    \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{address_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@address} \newline
-\fi
-\ifx\@empty\ecv@mobile
-  \ifx\@empty\ecv@telephone\else
-      \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{telephone_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@telephone} \newline
-  \fi
-\else
-  \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{mobile_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@mobile} \quad \ifx\@empty\ecv@telephone\else  \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{telephone_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@telephone\ \newline}\fi
-\fi
-\ifx\@empty\ecv@fax\else
-    \ecv@faxkey \ecv@fax 
-\fi
-\ifx\@empty\ecv@email\else
-    \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{mail_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \setul{.5pt}{.4pt}\href{mailto:\ecv@email}{\ul{\mbox{\ecv@email}}}} \newline
-\fi
-\ifx\@empty\ecv@homepage\else
-    \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{website_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \setul{.5pt}{.4pt}\href{\ecv@homepage}{\ul{\mbox{\ecv@homepage}}}} \newline
-\fi
-\ifx\@empty\ecv@im\else
-    \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{im_europass_icon.pdf}} \hspace{0.2mm}{\fontseries{m}\selectfont \ecv@im} \newline
-\fi
-  \ifx\@empty\ecv@gender\else
-      \if@ecvpineedspipe\else \hspace*{-0.5ex}\fi
-      \fontseries{m}\selectfont \ecvhighlight{~\if@ecvpineedspipe | \fi \ecv@genderkey} \ecv@gender \@ecvpineedspipetrue
-  \fi
-  \ifx\@empty\ecv@birth\else
-      \if@ecvpineedspipe\else \hspace*{-0.5ex}\fi
-      \fontseries{m}\selectfont \ecvhighlight{~\if@ecvpineedspipe | \fi\ecv@birthkey} \ecv@birth \@ecvpineedspipetrue
-  \fi
-  \if@ecvpicture
-      \ifx\@empty\ecv@nationality\else
-	    \ifx\@empty\ecv@gender\else
-		\ifx\@empty\ecv@birth\else
-		    \linebreak
-		    \@ecvpineedspipefalse
-		\fi
-	    \fi
+  \ecvitem[#1]{ %  left column
+    \ecvsectionstyle{\ecv@infosectionkey}
+    \if@ecvpicture
+      \if@ecvpictureleft
+	\raisebox{-\height}{\expandafter\includegraphics\expandafter[\ecv@pictureleftoptions]{\ecv@pictureleftfile}}
       \fi
-  \fi
-  \ifx\@empty\ecv@nationality\else
-      \if@ecvpineedspipe\else \hspace*{-0.5ex}\fi
-      \fontseries{m}\selectfont \ecvhighlight{~\if@ecvpineedspipe | \fi \ecv@nationalitykey}~\ecv@nationality \@ecvpineedspipetrue
-  \fi
-& 
-\Large \vspace{-\baselineskip}
-\raisebox{-\height}{\ecvdrawpicture}
-\end{tabular}
-\end{doublespacing}
-}
-\ecvspace{\ecv@afterpic}
+    \fi
+    }
+    { %  right column
+    \if@ecvpicture
+        \if@ecvpictureright
+            \setlength{\ecv@pileftcolwidth}{0.7\ecv@rightcolwidth}
+        \else
+            \setlength{\ecv@pileftcolwidth}{\ecv@rightcolwidth}
+        \fi
+    \else
+        \setlength{\ecv@pileftcolwidth}{\ecv@rightcolwidth}
+    \fi
+    \if@ecvpictureright
+        \setlength{\ecv@pirightcolwidth}{0.3\ecv@rightcolwidth}
+    \else
+        \setlength{\ecv@pirightcolwidth}{0pt}
+    \fi
+    \begin{doublespacing}
+    \begin{tabular}[t]{@{}p{\ecv@pileftcolwidth}@{}p{\ecv@pirightcolwidth}@{}}
+      \if@ecvdebug\cellcolor{green!25}\fi
+      \raggedright
+      {\ecvLargenormalstyle{\ecv@name}} \newline
+      \ifx\@empty\ecv@address\else
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{address_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@address} \newline
+      \fi
+      \ifx\@empty\ecv@mobile\else
+        \@ecvphoneispresenttrue
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{mobile_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@mobile} \quad
+      \fi
+	  \ifx\@empty\ecv@telephone\else
+        \@ecvphoneispresenttrue
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{telephone_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@telephone} \quad
+      \fi
+      \ifx\@empty\ecv@workphone\else
+        \@ecvphoneispresenttrue
+        \ifx\@empty\ecv@mobile\else
+            \ifx\@empty\ecv@telephone\else
+                \if@ecvpicture
+                    \if@ecvpictureright
+                        \newline
+                    \fi
+                \fi
+            \fi
+        \fi
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{work_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \ecv@workphone}
+      \fi
+      \if@ecvphoneispresent
+        \newline
+      \fi          
+      \ifx\@empty\ecv@fax\else
+        \ecv@faxkey \ecv@fax
+      \fi
+      \ifx\@empty\ecv@email\else
+        \@processlinks@converttoemailtrue
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{mail_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \processlinks{\ecv@email}} \newline
+        \@processlinks@converttoemailfalse
+      \fi
+        \ifx\@empty\ecv@homepage\else
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{website_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \processlinks{\ecv@homepage}} \newline
+      \fi
+	  \ifx\@empty\ecv@githubpage\else
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{github_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \processlinks{\ecv@githubpage}} \newline
+	  \fi
+	  \ifx\@empty\ecv@gitlabpage\else
+	  \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{gitlab_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \processlinks{\ecv@gitlabpage}} \newline
+	  \fi
+	  \ifx\@empty\ecv@linkedinpage\else
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{linkedin_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont \processlinks{\ecv@linkedinpage}} \newline
+	  \fi
+	  \ifx\@empty\ecv@orcid\else
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{orcid_europass_icon.pdf}}\hspace{0.2mm} {\fontseries{m}\selectfont\if@ecvorcidlabel\ecvhighlight{ORCID}~\fi\if@ecvorcidlink\setulcolor{\ecv@textcolor}\setul{.5pt}{.4pt}\href{https://orcid.org/\ecv@orcid}{\ul{\mbox{\ecv@orcid}}}\else\ecv@orcid\fi} \newline
+	  \fi
+      \ifx\@empty\ecv@im\else
+        \raisebox{-2\lineskip}{\includegraphics[width=0.4cm]{im_europass_icon.pdf}} \hspace{0.2mm}{\fontseries{m}\selectfont \ecv@im} \newline
+      \fi
+	\ifx\@empty\ecv@gender\else
+	    \fontseries{m}\selectfont \ecvhighlight{\if@ecvpineedspipe ~| \fi \ecv@genderkey} \ecv@gender \@ecvpineedspipetrue
+	\fi
+	\ifx\@empty\ecv@birth\else
+	    \fontseries{m}\selectfont \ecvhighlight{\if@ecvpineedspipe ~| \fi\ecv@birthkey} \ecv@birth \@ecvpineedspipetrue
+	\fi
+	\if@ecvpictureright
+	  \if@ecvpicture
+	    \ifx\@empty\ecv@nationality\else
+	      \ifx\@empty\ecv@gender\else
+		\ifx\@empty\ecv@birth\else
+		\linebreak
+		\@ecvpineedspipefalse
+		\fi
+	      \fi
+	    \fi
+	  \fi
+	\fi
+	\ifx\@empty\ecv@nationality\else
+	    \fontseries{m}\selectfont \ecvhighlight{\if@ecvpineedspipe ~| \fi \ecv@nationalitykey}~\ecv@nationality \@ecvpineedspipetrue
+	\fi
+      &
+      \if@ecvpictureright
+	\if@ecvdebug\cellcolor{red!25}\fi
+	\Large \vspace{-\baselineskip}
+	\raisebox{-\height}{\expandafter\includegraphics\expandafter[\ecv@picturerightoptions]{\ecv@picturerightfile}}
+      \fi
+    \end{tabular}
+    \end{doublespacing}
+  }
 }
 
 % Spoken language information
-\newcommand*\ecvmothertongue[2][0pt]{%
-\ecvblueitem[#1]{\ecv@mothertonguekey}{#2}
+\NewDocumentCommand\ecvmothertongue{om}{%
+  \@ecvitemcommandfalse
+  \ecvupdatecurrentskip{#1}{0pt}
+  \ecvblueitem{\ecv@mothertonguekey}{#2}
 }
 
 \newlength\ecv@langparwidth
@@ -498,8 +586,8 @@
 \newlength\ecv@langouterborderwidth
 \newlength\ecv@langinnerborderwidth
 
-\setlength{\ecv@langouterborderwidth}{0.04cm}
-\setlength{\ecv@langinnerborderwidth}{0.02cm}
+\setlength{\ecv@langouterborderwidth}{0.05cm}
+\setlength{\ecv@langinnerborderwidth}{0.03cm}
 
 
 \newif\if@ecvfirstlangrow\@ecvfirstlangrowfalse
@@ -511,7 +599,7 @@
     \setlength{\ecv@langtablewidth}{\ecv@rightcolwidth}
     \addtolength{\ecv@langtablewidth}{-4\arrayrulewidth}
     \arrayrulecolor{ecvtablebordercolor}
-    \begin{tabular}[t]{p{\ecv@langcola\ecv@langtablewidth}|p{\ecv@langcolb\ecv@langtablewidth}|p{\ecv@langcolc\ecv@langtablewidth}|p{\ecv@langcold\ecv@langtablewidth}|p{\ecv@langcole\ecv@langtablewidth}}
+    \begin{tabular}[t]{m{\ecv@langcola\ecv@langtablewidth}|m{\ecv@langcolb\ecv@langtablewidth}|m{\ecv@langcolc\ecv@langtablewidth}|m{\ecv@langcold\ecv@langtablewidth}|m{\ecv@langcole\ecv@langtablewidth}}
       \firsthline
       \multicolumn{2}{c|}{\ecvsectionstyle{\ecv@understandkey}} & \multicolumn{2}{c|}{\ecvsectionstyle{\ecv@speakkey}} & \centering \ecvsectionstyle{\ecv@writekey}\tabularnewline
       \hline
@@ -531,9 +619,25 @@
     \setlength{\ecv@langtablewidth}{\ecv@rightcolwidth}
     \addtolength{\ecv@langtablewidth}{-4\arrayrulewidth}
     \arrayrulecolor{ecvtablebordercolor}
-    \renewcommand{\arraystretch}{1.8}
+    \renewcommand{\arraystretch}{1.5}
     \begin{tabular}[t]{p{\ecv@langcola\ecv@rightcolwidth}p{\ecv@langcolb\ecv@rightcolwidth}p{\ecv@langcolc\ecv@rightcolwidth}p{\ecv@langcold\ecv@rightcolwidth}p{\ecv@langcole\ecv@rightcolwidth}}
       \centering{\raisebox{-\arrayrulewidth}{#3}} &\centering{\raisebox{-\arrayrulewidth}{#4}} &\centering{\raisebox{-\arrayrulewidth}{#5}} &\centering{\raisebox{-\arrayrulewidth}{#6}} &\centering{\raisebox{-\arrayrulewidth}{#7}} \tabularnewline
+      \hline
+    \end{tabular}
+  }
+  \@ecvfirstlangrowfalse
+}
+
+\newcommand*\ecvlanguagecertificate[1]{
+%   \vspace*{-\dp\strutbox}
+  \setlength{\arrayrulewidth}{\ecv@langouterborderwidth}
+  \ecvitem[-0.7\dp\strutbox]{}{
+    \setlength{\ecv@langtablewidth}{\ecv@rightcolwidth}
+    \addtolength{\ecv@langtablewidth}{-4\arrayrulewidth}
+    \arrayrulecolor{ecvtablebordercolor}
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}[t]{p{\ecv@rightcolwidth}}
+       \centering #1 \cellcolor{ecvhighlightcellcolor}\tabularnewline
       \hline
     \end{tabular}
   }
@@ -545,29 +649,54 @@
 
 \newcommand*{\ecvlanguagefooter}[1][0pt]{
 \nopagebreak[4]
-\ecvitem[0.5\dp\strutbox]{}{\textcolor{ecvsectioncolor}{\ecv@langshortdesckey}}
+\ecvitem[0.5\dp\strutbox]{}{\footnotesize \textcolor{ecvsectioncolor}{\ecv@langshortdesckey}}
 \nopagebreak[4]
 % \vspace*{-0.5\dp\strutbox}
-\ecvitem[-0.5\dp\strutbox]{}{\setulcolor{ecvlanglinkcolor}\setul{.5pt}{.4pt}\href{\ecv@langlinkkey}{\ul{\mbox{\textcolor{ecvlanglinkcolor}{\ecv@langfooterkey}}}}}
+\ecvitem[-0.5\dp\strutbox]{}{\footnotesize \setulcolor{ecvlanglinkcolor}\setul{.5pt}{.4pt}\href{\ecv@langlinkkey}{\ul{\mbox{\textcolor{ecvlanglinkcolor}{\ecv@langfooterkey}}}}}
 \renewcommand{\arraystretch}{0}
 }
 
-% See the Common European Framework of Reference for Languages:
-% http://www.coe.int/T/E/Cultural_Co-operation/education/Languages/Language_Policy/Common_Framework_of_Reference/default.asp
-\newcommand*\ecvCEF[2]{%
-%   \setlength\tabcolsep{1mm}
-
-% \begin{tabular}{@{}>{}m{.2\ecv@langparwidth}@{\hspace{1mm}}>{\centering}m{.74\ecv@langparwidth}@{}}
-% #1 & \small{#2}\tabularnewline
-% \end{tabular}
-}
-
+% commands from the old europecv class
+\newcommand*\ecvCEF[2]{}
 \newcommand*\ecvAOne{A1}
 \newcommand*\ecvATwo{A2}
 \newcommand*\ecvBOne{B1}
 \newcommand*\ecvBTwo{B2}
 \newcommand*\ecvCOne{C1}
 \newcommand*\ecvCTwo{C2}
+
+
+% Digital competences
+\def\ecv@dccol{0.2}
+\newcommand*\ecvdigitalcompetence[5]{%
+	%header
+	\setlength{\arrayrulewidth}{\ecv@langouterborderwidth}
+	\ecvblueitem{\ecv@digitalcompetenceskey}{
+		\renewcommand{\arraystretch}{1.5}
+		\setlength{\ecv@langtablewidth}{\ecv@rightcolwidth}
+		\addtolength{\ecv@langtablewidth}{-4\arrayrulewidth}
+		\arrayrulecolor{ecvtablebordercolor}
+		\begin{tabular}[t]{m{\ecv@dcompcola\ecv@langtablewidth}|m{\ecv@dcompcolb\ecv@langtablewidth}|m{\ecv@dcompcolc\ecv@langtablewidth}|m{\ecv@dcompcold\ecv@langtablewidth}|m{\ecv@dcompcole\ecv@langtablewidth}}
+			\firsthline
+			\multicolumn{5}{c}{\ecvsectionstyle{\ecv@assesskey}} \tabularnewline
+			\hline
+			\centering \ecvbluestyle{\ecv@informationprocessingkey}& \centering \ecvbluestyle{\ecv@communicationkey} &\centering \ecvbluestyle{\ecv@contentcreationkey}& \centering \ecvbluestyle{\ecv@safetykey}& \centering \ecvbluestyle{\ecv@problensolvingkey} \tabularnewline
+			\hline
+			\centering{#1} &\centering{#2} &\centering{#3} &\centering{#4} &\centering{#5} \tabularnewline
+			\hline
+		\end{tabular}
+	}
+	
+	%footer
+	\nopagebreak[4]
+	\ecvitem[0.5\dp\strutbox]{}{\footnotesize \setulcolor{ecvlanglinkcolor}\setul{.5pt}{.4pt}\href{\ecv@digcomplinkkey}{\ul{\mbox{\textcolor{ecvlanglinkcolor}{\ecv@digcompfooterkey}}}}}
+	\renewcommand{\arraystretch}{0}
+}
+
+\newcommand*\ecvBasic{\ecv@dcbasickey}
+\newcommand*\ecvIndependent{\ecv@dcindepkey}
+\newcommand*\ecvProficient{\ecv@dcprofkey}
+
 
 \def\ecv@kern{\kern0.5pt}
 %\def\ecv@kern{}
@@ -577,20 +706,13 @@
 \newlength\ecv@leftcolwidth
 \newlength\ecv@rightcolwidth
 \newlength\ecv@extrarowheight
-\newlength\ecv@leftboxwidth
-\newlength\ecv@rightboxwidth
 \newcommand*{\ecvRuleWidth}[1]{\setlength\ecv@rulewidth{#1}}
-\newcommand*{\ecvColSep}[1]{%
-  \setlength\ecv@colsep{#1}
-  \addtolength{\ecv@rightcolwidth}{-\ecv@colsep}
-  \addtolength{\ecv@rightboxwidth}{-\ecv@colsep}
-  }
-\newcommand*{\ecvLeftColumnWidth}[1]{\setlength\ecv@leftcolwidth{#1}%
-             \setlength{\ecv@rightcolwidth}{\textwidth}
-            \addtolength{\ecv@rightcolwidth}{-\ecv@leftcolwidth}
-            \addtolength{\ecv@rightcolwidth}{-\ecv@rulewidth}
-	    \setlength{\ecv@rightboxwidth}{\ecv@rightcolwidth}
-	    \setlength{\ecv@leftboxwidth}{\ecv@leftcolwidth}
+\newcommand*{\ecvColSep}[1]{\setlength\ecv@colsep{#1}}
+\newcommand*{\ecvLeftColumnWidth}[1]{
+    \setlength\ecv@leftcolwidth{#1}
+    \setlength{\ecv@rightcolwidth}{\textwidth}
+    \addtolength{\ecv@rightcolwidth}{-\ecv@leftcolwidth}
+    \addtolength{\ecv@rightcolwidth}{-\ecv@colsep}
 }
 \newcommand*{\ecvExtraRowHeight}[1]{\setlength\ecv@extrarowheight{#1}}
 \newcommand*{\ecvNoHorRule}{\def\ecv@hrule{}}
@@ -626,42 +748,68 @@
   \addtolength{\ecv@langparwidth}{-2\tabcolsep}
   \addtolength{\ecv@langparwidth}{-2\arrayrulewidth}
 
-\fontfamily{phv} \ifx\@empty\ecv@narrow \fontseries{mc} \else \fontseries{m} \fi
-\if@ecvbigfont\else \fontsize{9}{10.8} \fi \selectfont
+ \ifPDFTeX
+   \fontfamily{\ecv@font} \ifx\@empty\ecv@narrow \fontseries{mc} \else \fontseries{m} \fi
+ \fi
+ \if@ecvbigfont\else \fontsize{9}{10.8} \fi \selectfont
 
 \setlength\baselineskip{0pt}
 \color{\ecv@textcolor}
 }
 
-\newenvironment{ecvitemize}{
-\
-\vspace*{\ecv@itemizeskip}
-\begin{itemize}[leftmargin=*,nolistsep,nosep,topsep=0pt]
-}{
-\end{itemize}
-\ \vspace{-0.8\baselineskip}
+\newif\if@ecvinsideEcvItemize\@ecvinsideEcvItemizefalse
+\newcommand{\newecvitemize}[2]{
+  \newenvironment{#1}[1][leftmargin=*, nosep]{
+  \par
+  \begin{minipage}[t]{\linewidth}
+  \if@ecvinsideEcvItemize \vspace*{-0.5\baselineskip} \fi
+  \@ecvinsideEcvItemizetrue
+    \begin{#2}[##1]
+  }{
+    \end{#2}
+  \end{minipage}%
+  \@ecvinsideEcvItemizefalse
+  }
 }
-
+\newecvitemize{ecvitemize}{itemize}
+\newecvitemize{ecvenumerate}{enumerate}
 
 % styles
-\newcommand{\ecvsectionstyle}[1]{\textcolor{ecvsectioncolor}{\fontfamily{phv}\fontseries{m}\selectfont \MakeUppercase{\expandafter{#1}}}}
-\newcommand{\ecvbluenormalstyle}[1]{\fontfamily{phv}\fontseries{m}\selectfont\textcolor{ecvsectioncolor}{#1}}
+\newcommand{\ecvsectionstyle}[1]{\textcolor{ecvsectioncolor}{\MakeUppercase{\expandafter{#1}}}}
+\newcommand{\ecvbluenormalstyle}[1]{\textcolor{ecvsectioncolor}{#1}}
 \newcommand{\ecvtitlestyle}[1]{\large{\ecvbluenormalstyle{#1}}}
-\newcommand{\ecvlargenormalstyle}[1]{\large \fontfamily{phv}\fontseries{m}\selectfont #1}
-\newcommand{\ecvLargenormalstyle}[1]{\Large \fontfamily{phv}\fontseries{m}\selectfont #1}
+\newcommand{\ecvlargenormalstyle}[1]{\large #1}
+\newcommand{\ecvLargenormalstyle}[1]{\Large #1}
 \newcommand{\ecvhighlight}[1]{\textcolor{ecvhighlightcolor}{#1}}
 \newcommand{\ecvbluestyle}[1]{\textcolor{ecvsectioncolor}{#1}}
 
 
 % sectioning commands
-\newif\if@ecvitemskip\@ecvitemskipfalse
+\newcommand{\ecvupdatecurrentskip}[2]{
+% #1: value to be tested
+% #2: default value
+\if@ecvdebug
+  \message{^^J##################^^J}
+  \message{[europasscv] ecvupdatecurrentskip #1 #2, override \if@ecvoverrideskip true \else false \fi^^J}
+\fi
+
+\IfNoValueTF{#1}
+  {\if@ecvoverrideskip\else\setlength{\ecv@currentskip}{#2}\fi}
+  {\setlength{\ecv@currentskip}{#1}}
+
+\if@ecvdebug
+  \message{[europasscv] set \the\ecv@currentskip}
+  \message{^^J##################^^J}
+\fi
+}
+
+\newif\if@ecvoverrideskip\@ecvoverrideskipfalse
 \newlength{\ecv@itemskip}
 \newlength{\ecv@itemizeskip}
 \setlength\ecv@itemskip{2.8pt}
 
 \newlength{\ecv@currentskip}
 
-\newif\if@ecvlastitemwassection\@ecvlastitemwassectionfalse
 \newif\if@ecvitemcommand\@ecvitemcommandtrue
 
 \newcommand{\ecv@secondarg}{}
@@ -673,7 +821,9 @@
   \setlength{\baselineskip}{1.5\ht\strutbox}
   }p{#1}
 }
-\newcommand\ecvitem[3][\ecv@itemskip]{%
+\newcolumntype{R}[1]{>{\raggedleft}p{#1}}
+
+\NewDocumentCommand\ecvitem{o+m+m}{%
   \if@ecvdebug
     \renewcommand{\ecv@secondarg}{#2}
     \renewcommand{\ecv@thirdarg}{#3}
@@ -681,66 +831,73 @@
     \message{[europasscv] typesetting ^^J}
     \message{[europasscv] \meaning\ecv@secondarg^^J}
     \message{[europasscv] \meaning\ecv@thirdarg^^J}
-    \message{[europasscv] ecvitemskip = \if@ecvitemskip true, skipping \the\ecv@currentskip \else false\fi}
-  \fi
-
-  \if@ecvitemskip
-    \setlength{\ecv@currentskip}{#1}
-    \vspace{\ecv@currentskip}
+    \message{[europasscv] currentskip = \the\ecv@currentskip^^J}
+    \message{[europasscv] leftcolwidth = \the\ecv@leftcolwidth^^J}
+    \message{[europasscv] ecv@colsep = \the\ecv@colsep^^J}
+    \message{[europasscv] rightcolwidth = \the\ecv@rightcolwidth^^J}
+    \message{[europasscv] textwidth = \the\textwidth^^J}
   \fi
 
   \if@ecvitemcommand
-    \if@ecvlastitemwassection
-      \vspace{\smallskipamount}
-    \fi
+    \ecvupdatecurrentskip{#1}{\ecv@itemskip}
   \fi
+
+  \vspace{\ecv@currentskip}
 
   \setlength\ecv@itemizeskip{-\ht\strutbox}\addtolength{\ecv@itemizeskip}{-2\dp\strutbox}
 
-  \begin{tabular}{@{}p{\ecv@leftcolwidth}@{\extracolsep{\ecv@colsep}}P{\ecv@rightcolwidth}@{}}
-  \if@ecvdebug\cellcolor{yellow!25}\fi \raggedleft #2 & \if@ecvdebug\cellcolor{blue!25}\fi #3
+  \begin{tabular}{@{}R{\ecv@leftcolwidth}@{\hspace{\ecv@colsep}}P{\ecv@rightcolwidth}@{}}
+  \if@ecvdebug\cellcolor{yellow!25}\fi #2 & \if@ecvdebug\cellcolor{blue!25}\fi #3
   \end{tabular}
-  \@ecvitemskiptrue
-  \@ecvlastitemwassectionfalse
+  \par
+  \@ecvoverrideskipfalse
   \@ecvitemcommandtrue
 } 
 
 \newlength{\ecv@sectionrulelength}
 
-\newcommand{\ecvsection}[2][1.3\bigskipamount]{%
+\NewDocumentCommand\ecvsection{o+m}{%
   \@ecvitemcommandfalse
+  \ecvupdatecurrentskip{#1}{\bigskipamount}
   \setlength{\ecv@sectionrulelength}{\ecv@rightcolwidth}
   \addtolength{\ecv@sectionrulelength}{-7pt}
-  \ecvitem[#1]{\ecvsectionstyle{#2}}
-              {\textcolor{ecvrulecolor}{\noindent\rule{\ecv@sectionrulelength}{1pt}\rule{7pt}{8pt}}}
+  \ecvitem{\ecvsectionstyle{#2}}
+          {\textcolor{ecvrulecolor}{\noindent\rule{\ecv@sectionrulelength}{1pt}\rule{7pt}{8pt}}}
   \nopagebreak
-  \@ecvitemskipfalse
-  \@ecvlastitemwassectiontrue
-  \vspace*{\medskipamount}
+  \@ecvoverrideskiptrue
+  \setlength{\ecv@currentskip}{\medskipamount}
 }
 
-\newcommand\ecvtitle[3][\if@ecvitemskip 1.3\bigskipamount \else 0pt \fi]{%
+\NewDocumentCommand\ecvtitle{o+m+m}{%
   \@ecvitemcommandfalse
-  \ecvitem[#1]{\small \ecvbluenormalstyle{#2}}{\ecvtitlestyle{#3}}
+  \ecvupdatecurrentskip{#1}{1.3\bigskipamount}
+  \ecvitem{\small \ecvbluenormalstyle{#2}}{\ecvtitlestyle{#3}}
 }
 
-\newcommand{\ecvtitlelevel}[4][\if@ecvitemskip 1.3\bigskipamount \else 0pt \fi]{\ecvtitle[#1]{#2}{
-  \begin{tabular}[t]{@{}p{0.8\ecv@rightcolwidth}@{}p{0.2\ecv@rightcolwidth}@{}}
-   #3 & \if@ecvdebug\cellcolor{green!25}\fi \raggedleft \ecvhighlight{\small #4}
-  \end{tabular} \nolinebreak[4]
-}
-}
-
-\newcommand\ecvblueitem[3][\if@ecvitemskip 1.3\bigskipamount\else 0pt \fi]{\ecvitem[#1]{\textcolor{ecvsectioncolor}{#2}}{
-% \setlength\ecv@itemizeskip{-1.3\bigskipamount}\addtolength{\ecv@itemizeskip}{0.5\dp\strutbox}
- #3}
+\NewDocumentCommand\ecvtitlelevel{o+m+m+m}{
+  \@ecvitemcommandfalse
+  \ecvupdatecurrentskip{#1}{1.3\bigskipamount}
+    \ecvtitle{#2}{
+        #3 \if@ecvdebug\cellcolor{green!25}\fi \hfill \ecvhighlight{\small #4}
+        \nolinebreak[4]
+    }
 }
 
-\newcommand{\ecvbigitem}[3][\bigskipamount]{
-  \ecvitem[#1]{\ecvsectionstyle{#2}}{\ecvlargenormalstyle{#3}}
-  \vspace{\bigskipamount}
-  \@ecvitemskipfalse
+\NewDocumentCommand\ecvblueitem{o+m+m}{
+  \@ecvitemcommandfalse
+  \ecvupdatecurrentskip{#1}{1.3\bigskipamount}
+  \ecvitem{\textcolor{ecvsectioncolor}{#2}}{#3}
 }
+
+\NewDocumentCommand\ecvbigitem{o+m+m}{%
+  \@ecvitemcommandfalse
+  \ecvupdatecurrentskip{#1}{0.8\bigskipamount}
+  \ecvitem{\ecvsectionstyle{#2}}{\ecvlargenormalstyle{#3}}
+  \@ecvoverrideskiptrue
+  \setlength{\ecv@currentskip}{0.8\bigskipamount}
+}
+
+\newcommand{\ecvhighlightcell}[1]{\vspace{-4\dp\strutbox}\hspace{0.2cm}\parbox{0.95\ecv@rightcolwidth}{\vspace*{0.3cm} #1\vspace{0.1cm}} \cellcolor{ecvhighlightcellcolor}}
 
 \ecvRuleWidth{0pt}
 
@@ -749,5 +906,6 @@
 \definecolor{ecvsectioncolor}{HTML}{0e4194}
 \definecolor{ecvhighlightcolor}{HTML}{1593cb}
 \definecolor{ecvtablebordercolor}{HTML}{c6c6c6}
+\definecolor{ecvhighlightcellcolor}{HTML}{ebebeb}
 \definecolor{ecvlanglinkcolor}{HTML}{000080}
 \definecolor{ecvtextcolor}{HTML}{3e3a38}

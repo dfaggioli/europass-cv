@@ -1,7 +1,7 @@
 %!TEX encoding = UTF-8 Unicode
 %
 % 
-\ProvidesFile{ecvit.def}[europecv Italian definitions]
+\ProvidesFile{europasscv_it.def}[europasscv Italian definitions]
 % Personal information
 \def\ecv@infosectionkey{\ecv@utf{Informazioni personali}}
 \def\ecv@namekey{\ecv@utf{Nome e cognome}}
@@ -28,13 +28,25 @@
 \def\ecv@readkey{\ecv@utf{Lettura}}
 \def\ecv@interactkey{\ecv@utf{Interazione}}
 \def\ecv@productkey{\ecv@utf{Produzione orale}}
-\def\ecv@langshortdesckey{\ecv@utf{Livelli: A1/A2: Livello base - B1/B2: Livello intermedio - C1/C2: Livello avanzato}}
-\def\ecv@langfooterkey{\ecv@utf{Quadro comune europeo di riferimento per le lingue}}
+\def\ecv@langshortdesckey{\ecv@utf{Livelli: A1 e A2: Utente base -- B1 e B2: Utente autonomo -- C1 e C2: Utente avanzato}}
+\def\ecv@langfooterkey{\ecv@utf{Quadro Comune Europeo di Riferimento delle Lingue}}
 \def\ecv@langlinkkey{\ecv@utf{http://europass.cedefop.europa.eu/it/resources/european-language-levels-cefr}}
 \def\ecv@cefbasickey{\ecv@utf{Utente elementare}}
 \def\ecv@cefindepkey{\ecv@utf{Utente autonomo}}
 \def\ecv@cefprofkey{\ecv@utf{Utente avanzato}}
 \def\ecv@europeanunionkey{\ecv@utf{Unione Europea}}
+% Digital competences self-assessment grid
+\def\ecv@digitalcompetenceskey{\ecv@utf{Competenze digitali}}
+\def\ecv@informationprocessingkey{\ecv@utf{Elaborazione delle informazioni}}
+\def\ecv@communicationkey{\ecv@utf{Comunicazione}}
+\def\ecv@contentcreationkey{\ecv@utf{Creazione di contenuti}}
+\def\ecv@safetykey{\ecv@utf{Sicurezza}}
+\def\ecv@problensolvingkey{\ecv@utf{Risoluzione di problemi}}
+\def\ecv@digcompfooterkey{\ecv@utf{Competenze digitali - Scheda per l'autovalutazione}}
+\def\ecv@digcomplinkkey{\ecv@utf{http://europass.cedefop.europa.eu/it/resources/digital-competences}}
+\def\ecv@dcbasickey{\ecv@utf{Utente base}}
+\def\ecv@dcindepkey{\ecv@utf{Utente autonomo}}
+\def\ecv@dcprofkey{\ecv@utf{Utente avanzato}}
 
 % Width of language columns
 \def\ecv@langcola{0.15}
